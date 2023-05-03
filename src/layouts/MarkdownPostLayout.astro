@@ -1,4 +1,9 @@
 ---
+import type { postSchema } from "../schemas/PostSchema";
+import type { z } from "astro:content";
+type Props = {
+  frontmatter: z.infer<typeof postSchema>;
+};
 const { frontmatter } = Astro.props;
 const isFilledAuthorPlatform = frontmatter.authorPlatform;
 ---
@@ -8,7 +13,7 @@ const isFilledAuthorPlatform = frontmatter.authorPlatform;
   <meta charset="utf-8" />
 </head>
 <h1>{frontmatter.title}</h1>
-<p>{frontmatter.pubDate.slice(0, 10)}</p>
+<p>{new Date(frontmatter.pubDate).toISOString().slice(0, 10)}</p>
 <p><em>{frontmatter.description}</em></p>
 <>
   Written by: {
@@ -23,5 +28,5 @@ const isFilledAuthorPlatform = frontmatter.authorPlatform;
     )
   }
 </>
-<img src={frontmatter.image.url} width="300" alt={frontmatter.image.alt} />
+<img src={frontmatter.image?.url} width="300" alt={frontmatter.image?.alt} />
 <slot />

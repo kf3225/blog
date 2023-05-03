@@ -1,2 +1,80 @@
 ---
+import type { Page } from "astro";
+import type { postSchema } from "../schemas/PostSchema";
+import type { z } from "astro:content";
+import "../styles/global.css";
+import code from "../assets/images/code.svg";
+
+type Props = {
+  page: Page<
+    Omit<Page<"posts">, "data"> & {
+      data: z.infer<typeof postSchema>;
+      slug: string;
+      body: string;
+    }
+  >;
+};
+
+const { page } = Astro.props;
 ---
+
+<div class="xl:flex flex-row justify-center gap-4">
+  <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+    {
+      page.data
+        .filter(({ data }) => !data.isDraft)
+        .map(({ slug, body, data }) => (
+          <div class="max-w-sm rounded overflow-hidden shadow-lg">
+            <a href={`/post/${slug}`}>
+              <div class="flex justify-center items-center">
+                <img
+                  class="object-contain h-48"
+                  src={data.image?.url || code.src}
+                  alt={data.image?.alt || "base image"}
+                />
+              </div>
+            </a>
+            <div class="px-6 py-4">
+              <a href={`/post/${slug}`}>
+                <div class="font-bold text-xl mb-2">{data.title}</div>
+                <div class="text-xm mb-2">
+                  {new Date(data.pubDate).toISOString().slice(0, 10)}
+                </div>
+              </a>
+              <p class="mb-3 text-gray-700 text-base">
+                {body.slice(0, 100)}...
+              </p>
+              <a
+                href={`/post/${slug}`}
+                class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-gray-700 rounded-lg hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800"
+              >
+                Read more
+                <svg
+                  aria-hidden="true"
+                  class="w-4 h-4 ml-2 -mr-1"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              </a>
+            </div>
+            <div class="px-6 pt-4 pb-2">
+              {data.tags.map((tag) => (
+                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
+                  #{tag}
+                </span>
+              ))}
+            </div>
+          </div>
+        ))
+    }
+  </div>
+</div>
+<a href={page.url.prev}>prev</a>
+<a href={page.url.next}>next</a>

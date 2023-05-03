@@ -1,14 +1,9 @@
 ---
-import type { GetStaticPathsOptions, Page } from "astro";
-import type { CollectionEntry } from "astro:content";
-import { getCollection } from "astro:content";
 import Header from "../../components/Header.astro";
+import type { GetStaticPathsOptions } from "astro";
 import Footer from "../../components/Footer.astro";
-import "../../styles/global.css";
-
-type Props = {
-  page: Page<"posts">;
-};
+import Pagenation from "../../components/Pagenation.astro";
+import { getCollection } from "astro:content";
 
 export const getStaticPaths = async ({ paginate }: GetStaticPathsOptions) => {
   return paginate(await getCollection("posts"), { pageSize: 6 });
@@ -25,20 +20,7 @@ const { page } = Astro.props;
   </head>
   <body>
     <Header />
-
-    <h1>My Blog</h1>
-    <p>This is where I will post about my journey learning Astro.</p>
-    <ul>
-      {
-        page.data.map(({ slug, data }) => (
-          <li>
-            <a href={`/post/${slug}`}>{data.title}</a>
-          </li>
-        ))
-      }
-    </ul>
-    <a href={page.url.prev}>prev</a>
-    <a href={page.url.next}>next</a>
+    <Pagenation page={page} />
     <Footer />
   </body>
 </html>

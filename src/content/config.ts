@@ -7,6 +7,6 @@ const postsCollection = defineCollection({ schema: postSchema });
 
 // 3. コレクションを登録するために `collections` オブジェクトをエクスポート。
 // `key` が 1. で作った `<コレクション名>` に対応している。
-export const collections = <const>{
+export const collections = {
   posts: postsCollection,
 };
