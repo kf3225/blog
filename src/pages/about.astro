@@ -3,7 +3,7 @@ import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import "../styles/global.css";
 
-const pageTitle = "About Me";
+const pageTitle = "about";
 
 const identity = {
   firstName: "Sarah",
@@ -37,7 +37,7 @@ const skillColor = "navy";
     </style>
   </head>
   <body>
-    <Header />
+    <Header pageTitle={pageTitle} />
     <h1>{pageTitle}</h1>
     <h2>... and my new Astro site!</h2>
 

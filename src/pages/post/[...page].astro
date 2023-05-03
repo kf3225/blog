@@ -10,6 +10,7 @@ export const getStaticPaths = async ({ paginate }: GetStaticPathsOptions) => {
 };
 
 const { page } = Astro.props;
+const pageTitle = "post";
 ---
 
 <html lang="ja">
@@ -19,7 +20,7 @@ const { page } = Astro.props;
     <title>Blog</title>
   </head>
   <body>
-    <Header />
+    <Header pageTitle={pageTitle} />
     <Pagenation page={page} />
     <Footer />
   </body>
